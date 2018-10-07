@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="size_start">24sp</dimen>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="card_corner">20dp</dimen>
+    <dimen name="plain_text">16sp</dimen>
+    <dimen name="card_with">355dp</dimen>
+    <dimen name="card_padding">4dp</dimen>
+    <dimen name="card_width">200dp</dimen>
+    <dimen name="rv_game_height">300dp</dimen>
+    <dimen name="small_corner">7</dimen>
+</resources>

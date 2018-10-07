@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">MonsterCafe</string>
+    <string name="start_game">Начать игру</string>
+    <string name="desc_game">Игра кафе для чудищ. Выберите количество игроков и нажмите кнопку</string>
+    <string name="title_activity_game">GameActivity</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+    <string name="title_activity_init_game">InitGame</string>
+    <string name="player_name">Введите имя игрока</string>
+    <string name="next_string">Далее</string>
+    <string name="player_turn">ХОДИТ ИГРОК</string>
+    <string name="player_field">Карты игрока на поле</string>
+    <string name="question_title">Уверены?</string>
+    <string name="question_message">Ходите картой</string>
+    <string name="yes">ДА</string>
+    <string name="no">НЕТ</string>
+</resources>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="users_count">
+        <item>2 игрока</item>
+        <item>3 игрока</item>
+        <item>4 игрока</item>
+        <item>5 игроков</item>
+    </string-array>
+    <string-array name="test_names">
+        <item>Колобан</item>
+        <item>Бамбр</item>
+        <item>Грызь</item>
+    </string-array>
+    <string-array name="test_desc">
+        <item>Колобан отличная карта</item>
+        <item>Лучше бамбра больше нет</item>
+        <item>Грызь всем картам карта</item>
+    </string-array>
+    <string-array name="test_images">
+        <item>@drawable/koloban</item>
+        <item>@drawable/bambr</item>
+        <item>@drawable/gryz</item>
+    </string-array>
+    <string-array name="test_small_images">
+        <item>@drawable/ulit_small</item>
+        <item>@drawable/cheesecake_small</item>
+        <item>@drawable/nosotyk_small</item>
+    </string-array>
+</resources>
