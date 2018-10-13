@@ -169,6 +169,7 @@ class MonsterCafePresenter: GamePresenter() {
     }
 
     override fun restartGame(view: View) {
+        currentPlayerIndex = 0
         startActivity<MainActivity>(view)
     }
 
