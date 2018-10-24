@@ -21,6 +21,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
+            android:contentDescription="@string/desc_game"
             app:layout_constraintEnd_toEndOf="parent"
             app:srcCompat="@drawable/cheesecake" />
 
@@ -47,11 +48,12 @@
 
         <Button
             android:id="@+id/button_start"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:onClick="onStartClick"
             android:text="@string/start_game"
-            android:visibility="visible"
-            android:onClick="onStartClick"/>
+            android:visibility="visible" />
     </LinearLayout>
 
     </ScrollView>
