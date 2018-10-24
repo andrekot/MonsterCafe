@@ -14,12 +14,14 @@ class Game(conf: Map<Card, Int> = DEFAULT_DECK_CONFIG) {
         cardDeck = CardDeck(conf, total)
     }
 
-    object gameField {
+    inner class GameField {
         //карты игроков на поле
         var fieldCards: MutableMap<Player, MutableList<Card>> = mutableMapOf()
         var fieldKrolleg: MutableMap<Player, MutableList<Card>> = mutableMapOf()
         var fieldLatte: MutableMap<Player, MutableMap<Card, Card?>> = mutableMapOf()
     }
+
+    val gameField = GameField()
 
     fun  getPlayerField(player: Player): Array<Card> {
         return gameField.fieldCards[player]?.toTypedArray() ?: arrayOf()
