@@ -72,7 +72,7 @@ class Game(conf: Map<Card, Int> = DEFAULT_DECK_CONFIG) {
         cards?.removeAll(turnCards) //кладем карты игрока на поле в колоду
         if (gameField.fieldCards[player] == null) gameField.fieldCards[player] = mutableListOf()
         turnCards.forEach {
-            if (it != null) gameField.fieldCards[player]?.add(it)
+            if (it != null && it !is Cheesecake) gameField.fieldCards[player]?.add(it)
         }
     }
 

@@ -37,8 +37,14 @@ class GameActivity : AppCompatActivity() {
         recyclerBottom.layoutManager = LinearLayoutManager(recyclerBottom.context, LinearLayoutManager.HORIZONTAL, false)
     }
 
-    fun onNewGameClick(view: View) {
-        presenter.setCurrentState(view, State.RESTART)
+    fun onNewGameClick(v: View) {
+        AlertDialog.Builder(v.context)
+                .setTitle(R.string.question_title)
+                .setMessage(v.context.resources.getString(R.string.restart_game))
+                .setPositiveButton(android.R.string.yes)
+                { _, _ -> presenter.setCurrentState(v, State.RESTART, null) }
+                .setNegativeButton(android.R.string.no) { _, _ -> presenter.noClicked() }
+                .show()
     }
 }
 
@@ -80,7 +86,8 @@ class GameContentAdapter(context: Context) : RecyclerView.Adapter<GameViewHolder
             AlertDialog.Builder(v.context)
                     .setTitle(R.string.question_title)
                     .setMessage(StringBuilder().append(v.context.resources.getString(R.string.question_message), " ${holder.card?.name}") )
-                    .setPositiveButton(android.R.string.yes) { _, _ -> presenter.yesTurnClicked(holder.card!!, v) }
+                    .setPositiveButton(android.R.string.yes)
+                    { _, _ -> presenter.yesTurnClicked(v, arrayOf(holder.card!!)) }
                     .setNegativeButton(android.R.string.no) { _, _ -> presenter.noClicked() }
                     .show()
             }

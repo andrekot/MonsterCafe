@@ -13,6 +13,13 @@
     <string name="player_field">Карты игрока на поле</string>
     <string name="question_title">Уверены?</string>
     <string name="question_message">Ходите картой</string>
+    <string name="restart_game">Уверены, что хотите начать заново?</string>
     <string name="yes">ДА</string>
     <string name="no">НЕТ</string>
+    <string name="cheesecake_turn">Чизкейк! Вы можете походить двумя картами</string>
+    <string name="cheesecake_err">Ошибка</string>
+    <string name="cheesecake_alert">Чизкейк! Вы должны выбрать две карты</string>
+    <string name="do_cheesecake">Сделать ход</string>
+    <string name="first_card">Выберите первую карту</string>
+    <string name="second_card">Выберите вторую карту</string>
 </resources>

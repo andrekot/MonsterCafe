@@ -7,8 +7,8 @@ import android.content.Intent
 import android.view.View
 
 enum class State {
-    INIT(),
-    FOLD_CARDS(),
+    INIT,
+    FOLD_CARDS,
     ROUND1,
     END_ROUND1,
     COUNT_POINTS_ROUND1,
@@ -28,10 +28,10 @@ class Starter(val starter: (i: Intent)->Unit)
 interface Presenter {
     fun setStarter(s: Starter)
     fun getCurrentState(): State
-    fun setCurrentState(view: View, new_state: State, vararg args: Any)
+    fun setCurrentState(view: View, new_state: State, cards: Array<Card>?, args: Array<String?>? = null)
     fun init(view: View, users: Int)
     fun stateFoldCards(view: View, players: Array<String?>)
-    fun stateRound1(card: Card)
+    fun stateRound1(cards: Array<Card>)
     fun stateRound2()
     fun stateRound3()
     fun stateEndRound1()
@@ -49,12 +49,11 @@ abstract class GamePresenter: Presenter {
     abstract var state: State
     abstract var engine: Game
 
-    override fun setCurrentState(view: View, new_state: State, vararg args: Any) {
-        @Suppress("UNCHECKED_CAST")
+    override fun setCurrentState(view: View, new_state: State, cards: Array<Card>?, args: Array<String?>?) {
         when (new_state) {
-            State.INIT -> init(view, args[0].toString().toInt())
-            State.FOLD_CARDS -> stateFoldCards(view, args[0] as Array<String?>)
-            State.ROUND1 -> stateRound1(args[0] as Card)
+            State.INIT -> init(view, args!![0].toString().toInt())
+            State.FOLD_CARDS -> stateFoldCards(view, args!!)
+            State.ROUND1 -> stateRound1(cards!!)
             State.ROUND2 -> stateRound2()
             State.ROUND3 -> stateRound3()
             State.END_ROUND1 -> stateEndRound1()
@@ -80,12 +79,16 @@ class MonsterCafePresenter: GamePresenter() {
 
     var currentPlayer: Player? = null
         get() = engine.playerCards.keys.elementAt(currentPlayerIndex)
+
     var currentPlayerCards: Array<Card>? = null
         get() = engine.playerCards[currentPlayer]?.toTypedArray()
+
     var cardSize: Int = 0
         get() = currentPlayerCards?.size ?: 0
+
     var currentPlayerField: Array<Card>? = null
         get() = engine.getPlayerField(currentPlayer!!)
+
     var fieldSize: Int = 0
         get() = currentPlayerField?.size ?: 0
 
@@ -115,8 +118,10 @@ class MonsterCafePresenter: GamePresenter() {
         startActivity<GameActivity>(view)
     }
 
-    override fun stateRound1(card: Card) {
-        engine.userTurn(currentPlayer!!, card)
+    override fun stateRound1(cards: Array<Card>) {
+        cards.forEach {
+            engine.userTurn(currentPlayer!!, it)
+        }
         if (currentPlayerIndex < engine.playersCount - 1)
         currentPlayerIndex++
         else currentPlayerIndex = 0
@@ -173,14 +178,21 @@ class MonsterCafePresenter: GamePresenter() {
         startActivity<MainActivity>(view)
     }
 
-    fun yesTurnClicked(card: Card?, view: View) {
-        if (card == null) return
-        when (currentRound) {
-            1 -> setCurrentState(view, State.ROUND1, card)
-            2 -> setCurrentState(view, State.ROUND2, card)
-            3 -> setCurrentState(view, State.ROUND3, card)
+    private fun doCheesecake(view: View) {
+        startActivity<CheesecakeActivity>(view)
+    }
+
+    fun yesTurnClicked( view: View, card: Array<Card>) {
+        if (card.isEmpty()) return
+        if (card[0] is Cheesecake) doCheesecake(view)
+        else {
+            when (currentRound) {
+                1 -> setCurrentState(view, State.ROUND1, card)
+                2 -> setCurrentState(view, State.ROUND2, card)
+                3 -> setCurrentState(view, State.ROUND3, card)
+            }
+            startActivity<GameActivity>(view)
         }
-        startActivity<GameActivity>(view)
     }
 
     fun noClicked() {

@@ -24,7 +24,7 @@ class InitGame : AppCompatActivity() {
     }
 
     fun onInitClick(view: View) {
-        presenter.setCurrentState(view, State.FOLD_CARDS, adapter.names, GameActivity::class.java)
+        presenter.setCurrentState(view, State.FOLD_CARDS, null, adapter.names)
     }
 
     private fun initRecyclerView() {

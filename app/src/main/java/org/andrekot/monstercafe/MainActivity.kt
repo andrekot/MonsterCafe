@@ -26,6 +26,6 @@ class MainActivity : AppCompatActivity() {
         val users = spinner_start.selectedItemPosition + 2
         Toast.makeText(applicationContext, "Старт игры! Игроков: $users", Toast.LENGTH_SHORT).show()
         presenter.setStarter(Starter(::startActivity))
-        presenter.setCurrentState(view, State.INIT, users, view)
+        presenter.setCurrentState(view, State.INIT, null, arrayOf(users.toString()))
     }
 }

@@ -14,14 +14,24 @@
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
         <activity
             android:name=".GameActivity"
-            android:label="@string/title_activity_game" />
+            android:label="@string/title_activity_game">
+            <intent-filter>
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".InitGame"
-            android:label="@string/title_activity_init_game" />
+            android:label="@string/title_activity_init_game">
+            <intent-filter>
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".CheesecakeActivity"></activity>
     </application>
 
 </manifest>
