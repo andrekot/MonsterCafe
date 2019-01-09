@@ -55,6 +55,7 @@ class CheesecakeActivity : AppCompatActivity(), AdapterView.OnItemSelectedListen
         //new try rebase first commit
         //new try rebase second commit
         //this is a first master commit
+        //this is a second master commit
     }
 
     override fun onNothingSelected(parent: AdapterView<*>?) {
