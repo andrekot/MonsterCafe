@@ -54,6 +54,7 @@ class CheesecakeActivity : AppCompatActivity(), AdapterView.OnItemSelectedListen
         //secondCardAdapter.notifyDataSetChanged()
         //new try rebase first commit
         //new try rebase second commit
+        //this is a first master commit
     }
 
     override fun onNothingSelected(parent: AdapterView<*>?) {
