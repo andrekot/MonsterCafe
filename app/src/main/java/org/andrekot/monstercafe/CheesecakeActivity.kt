@@ -51,11 +51,7 @@ class CheesecakeActivity : AppCompatActivity(), AdapterView.OnItemSelectedListen
             lastPos = position
         }
         Toast.makeText(this, "lastPos = $lastPos pos = $position", Toast.LENGTH_LONG).show()
-        //secondCardAdapter.notifyDataSetChanged()
-        //new try rebase first commit
-        //new try rebase second commit
-        //this is a first master commit
-        //this is a second master commit
+        
     }
 
     override fun onNothingSelected(parent: AdapterView<*>?) {
