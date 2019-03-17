@@ -1,4 +1,4 @@
-package org.andrekot.monstercafe
+package org.andrekot.monstercafe.utils
 
 /*Created by Andrekot on 07/10/18*/
 

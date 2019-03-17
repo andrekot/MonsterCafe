@@ -1,4 +1,4 @@
-package org.andrekot.monstercafe
+package org.andrekot.monstercafe.view
 
 /*
  * Simple card game 'Monster Cafe'
@@ -12,8 +12,10 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_main.*
-
-val presenter = MonsterCafePresenter()
+import org.andrekot.monstercafe.R
+import org.andrekot.monstercafe.presenter
+import org.andrekot.monstercafe.presenter.model.GameState
+import org.andrekot.monstercafe.utils.Starter
 
 class MainActivity : AppCompatActivity() {
 
@@ -25,7 +27,9 @@ class MainActivity : AppCompatActivity() {
     fun onStartClick(view: View) {
         val users = spinner_start.selectedItemPosition + 2
         Toast.makeText(applicationContext, "Старт игры! Игроков: $users", Toast.LENGTH_SHORT).show()
-        presenter.setStarter(Starter(::startActivity))
-        presenter.setCurrentState(view, State.INIT, null, arrayOf(users.toString()))
+        presenter {
+            setStarter(Starter(::startActivity))
+            setCurrentState(view, GameState.INIT, null, arrayOf(users.toString()))
+        }
     }
 }

@@ -1,4 +1,4 @@
-package org.andrekot.monstercafe
+package org.andrekot.monstercafe.view
 
 /*Created by Andrekot on 07/10/18*/
 
@@ -15,8 +15,13 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import org.andrekot.monstercafe.R
+import org.andrekot.monstercafe.model.Card
+import org.andrekot.monstercafe.presenter
+import org.andrekot.monstercafe.presenter.model.GameState
 
 class GameActivity : AppCompatActivity() {
+
     lateinit var recyclerView: RecyclerView
     lateinit var recyclerBottom: RecyclerView
 
@@ -24,7 +29,7 @@ class GameActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_game)
         initRecyclerView()
-        findViewById<TextView>(R.id.player_name).text = StringBuilder().append(resources.getString(R.string.player_turn), " ${presenter.currentPlayer?.name}")
+        findViewById<TextView>(R.id.player_name).text = StringBuilder().append(resources.getString(R.string.player_turn), " ${ presenter { currentPlayer?.name } }")
     }
 
     private fun initRecyclerView() {
@@ -42,8 +47,8 @@ class GameActivity : AppCompatActivity() {
                 .setTitle(R.string.question_title)
                 .setMessage(v.context.resources.getString(R.string.restart_game))
                 .setPositiveButton(android.R.string.yes)
-                { _, _ -> presenter.setCurrentState(v, State.RESTART, null) }
-                .setNegativeButton(android.R.string.no) { _, _ -> presenter.noClicked() }
+                { _, _ -> presenter { setCurrentState(v, GameState.RESTART, null) } }
+                .setNegativeButton(android.R.string.no) { _, _ -> presenter { noClicked() } }
                 .show()
     }
 }
@@ -56,20 +61,21 @@ class GameViewHolder(inflater: LayoutInflater, parent: ViewGroup) : RecyclerView
 }
 
 class GameContentAdapter(context: Context) : RecyclerView.Adapter<GameViewHolder>() {
-    private var mNames: Array<String?>? = arrayOfNulls(presenter.cardSize)
-    private var mDesc: Array<String?>? = arrayOfNulls(presenter.cardSize)
-    private var mImages: Array<Drawable?>? = arrayOfNulls(presenter.cardSize)
+    private var mNames: Array<String?>? = arrayOfNulls(presenter { cardSize })
+    private var mDesc: Array<String?>? = arrayOfNulls(presenter { cardSize })
+    private var mImages: Array<Drawable?>? = arrayOfNulls(presenter { cardSize })
 
     init {
-        mNames = presenter.currentPlayerCards?.map { it.name }?.toTypedArray()
-        mDesc = presenter.currentPlayerCards?.map { it.desc }?.toTypedArray()
-        mImages = arrayOfNulls(presenter.cardSize)
-        presenter.currentPlayerCards?.forEachIndexed { index, card ->
-            try {
-                mImages!![index] = context.resources.getDrawable(presenter.getImageId(context, card).first, context.theme)
-            }
-            catch (e: Exception){
-                Toast.makeText(context, "${card.img}", Toast.LENGTH_LONG).show()
+        mNames = presenter { currentPlayerCards?.map { it.name }?.toTypedArray() }
+        mDesc = presenter { currentPlayerCards?.map { it.desc }?.toTypedArray() }
+        mImages = arrayOfNulls(presenter { cardSize })
+        presenter {
+            currentPlayerCards?.forEachIndexed { index, card ->
+                try {
+                    mImages!![index] = context.resources.getDrawable(presenter { getImageId(context, card).first }, context.theme)
+                } catch (e: Exception) {
+                    Toast.makeText(context, "${card.img}", Toast.LENGTH_LONG).show()
+                }
             }
         }
     }
@@ -81,20 +87,20 @@ class GameContentAdapter(context: Context) : RecyclerView.Adapter<GameViewHolder
         holder.name.text = mNames!![position % mNames!!.size]
         holder.desc.text = mDesc!![position % mDesc!!.size]
         holder.image.setImageDrawable(mImages!![position % mImages!!.size])
-        holder.card = presenter.currentPlayerCards!![position % presenter.cardSize]
+        holder.card = presenter { currentPlayerCards!![position % presenter { cardSize }] }
         holder.itemView.setOnClickListener {v ->
             AlertDialog.Builder(v.context)
                     .setTitle(R.string.question_title)
                     .setMessage(StringBuilder().append(v.context.resources.getString(R.string.question_message), " ${holder.card?.name}") )
                     .setPositiveButton(android.R.string.yes)
-                    { _, _ -> presenter.yesTurnClicked(v, arrayOf(holder.card!!)) }
-                    .setNegativeButton(android.R.string.no) { _, _ -> presenter.noClicked() }
+                    { _, _ -> presenter { yesTurnClicked(v, arrayOf(holder.card!!)) } }
+                    .setNegativeButton(android.R.string.no) { _, _ -> presenter { noClicked() } }
                     .show()
             }
     }
 
     override fun getItemCount(): Int {
-        return presenter.cardSize
+        return presenter { cardSize }
     }
 }
 
@@ -103,16 +109,17 @@ class BottomViewHolder(inflater: LayoutInflater, parent: ViewGroup) : RecyclerVi
 }
 
 class BottomContentAdapter(context: Context) : RecyclerView.Adapter<BottomViewHolder>() {
-    private var mImages: Array<Drawable?> = arrayOfNulls(presenter.fieldSize)
+    private var mImages: Array<Drawable?> = arrayOfNulls(presenter { fieldSize })
 
     init {
-        mImages = arrayOfNulls(presenter.fieldSize)
-        presenter.currentPlayerField?.forEachIndexed { index, card ->
-            try {
-                mImages[index] = context.resources.getDrawable(presenter.getImageId(context, card).second, context.theme)
-            }
-            catch (e: Exception){
-                Toast.makeText(context, "$card.name", Toast.LENGTH_SHORT).show()
+        mImages = arrayOfNulls(presenter { fieldSize })
+        presenter {
+            currentPlayerField?.forEachIndexed { index, card ->
+                try {
+                    mImages[index] = context.resources.getDrawable(this.getImageId(context, card).second, context.theme)
+                } catch (e: Exception) {
+                    Toast.makeText(context, "$card.name", Toast.LENGTH_SHORT).show()
+                }
             }
         }
     }
@@ -125,6 +132,6 @@ class BottomContentAdapter(context: Context) : RecyclerView.Adapter<BottomViewHo
     }
 
     override fun getItemCount(): Int {
-        return presenter.fieldSize
+        return presenter { fieldSize }
     }
 }

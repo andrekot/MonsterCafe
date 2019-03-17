@@ -1,4 +1,6 @@
-package org.andrekot.monstercafe
+package org.andrekot.monstercafe.engine
+
+import org.andrekot.monstercafe.model.*
 
 /*Created by Andrekot on 07/10/18*/
 

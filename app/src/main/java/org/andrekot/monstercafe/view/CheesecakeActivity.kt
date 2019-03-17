@@ -1,17 +1,16 @@
-package org.andrekot.monstercafe
+package org.andrekot.monstercafe.view
 
-import android.graphics.drawable.Drawable
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v7.app.AlertDialog
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import android.widget.SpinnerAdapter
 import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_cheesecake.*
-
-data class SpinnerCard(val name: String, val img: Drawable)
+import org.andrekot.monstercafe.R
+import org.andrekot.monstercafe.model.Cheesecake
+import org.andrekot.monstercafe.presenter
 
 class CheesecakeActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
 
@@ -23,24 +22,26 @@ class CheesecakeActivity : AppCompatActivity(), AdapterView.OnItemSelectedListen
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_cheesecake)
         //val playerCards//: MutableList<String> = mutableListOf()
-        val playerCards = presenter.currentPlayerCards?.filter {
-            /*val draw = this.resources.getDrawable(
-                    presenter.getImageId(this, it).first, this.theme
-            )
-            playerCards.add(SpinnerCard(it.name, draw))*/
-            it !is Cheesecake
-        }!!.map { it.name }
+        val playerCards = presenter {
+            currentPlayerCards?.filter {
+                /*val draw = this.resources.getDrawable(
+                        presenter.getImageId(this, it).first, this.theme
+                )
+                playerCards.add(SpinnerCard(it.name, draw))*/
+                it !is Cheesecake
+            }!!.map { it.name }
+        }
         firstCardAdapter = ArrayAdapter(this,
-                R.layout.spinner_card_item, R.id.textview, playerCards)
+                    R.layout.spinner_card_item, R.id.textview, playerCards)
         spinner_first_card.adapter = firstCardAdapter
         spinner_first_card.setOnItemSelectedListener(this)
 
         secondCardAdapter = ArrayAdapter(this,
-                R.layout.spinner_card_item, R.id.textview, playerCards)
+                    R.layout.spinner_card_item, R.id.textview, playerCards)
         spinner_second_card.adapter = secondCardAdapter
         frame_second_card.visibility = View.GONE
         button_cheesecake.setOnClickListener(::onCheesecakeClick)
-    }
+        }
 
     override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
         frame_second_card.visibility = View.VISIBLE
@@ -58,10 +59,6 @@ class CheesecakeActivity : AppCompatActivity(), AdapterView.OnItemSelectedListen
         //TODO("not implemented") //remove comment
     }
 
-    fun firstCardSelected(v: View) {
-
-    }
-
     fun onCheesecakeClick(v: View) {
         val first_card = spinner_first_card?.selectedItemPosition
         val second_card = spinner_second_card?.selectedItemPosition
@@ -70,8 +67,10 @@ class CheesecakeActivity : AppCompatActivity(), AdapterView.OnItemSelectedListen
                 .setMessage(R.string.cheesecake_alert)
                 .setPositiveButton(android.R.string.yes) { _, _ -> }
                 .show()
-        val playerCards = presenter.currentPlayerCards!!
-        presenter.yesTurnClicked(v, arrayOf(playerCards[first_card!!], playerCards[second_card!!]))
+        val playerCards = presenter { currentPlayerCards!! }
+        presenter {
+            yesTurnClicked(v, arrayOf(playerCards[first_card!!], playerCards[second_card!!]))
+        }
         this.finish()
     }
 }

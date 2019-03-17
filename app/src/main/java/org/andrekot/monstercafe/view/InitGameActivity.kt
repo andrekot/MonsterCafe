@@ -1,4 +1,4 @@
-package org.andrekot.monstercafe
+package org.andrekot.monstercafe.view
 
 /*Created by Andrekot on 07/10/18*/
 
@@ -12,8 +12,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import android.text.Editable
+import org.andrekot.monstercafe.R
+import org.andrekot.monstercafe.presenter
+import org.andrekot.monstercafe.presenter.model.GameState
 
-class InitGame : AppCompatActivity() {
+class InitGameActivity : AppCompatActivity() {
 
     lateinit var adapter: ContentAdapter
 
@@ -24,7 +27,7 @@ class InitGame : AppCompatActivity() {
     }
 
     fun onInitClick(view: View) {
-        presenter.setCurrentState(view, State.FOLD_CARDS, null, adapter.names)
+        presenter { setCurrentState(view, GameState.FOLD_CARDS, null, adapter.names) }
     }
 
     private fun initRecyclerView() {
@@ -41,11 +44,11 @@ class InitViewHolder(inflater: LayoutInflater, parent: ViewGroup) :
 }
 
 class ContentAdapter() : RecyclerView.Adapter<InitViewHolder>() {
-    private var mNames: Array<String?> = arrayOfNulls(presenter.engine.playersCount)
-    var names: Array<String?> = arrayOfNulls(presenter.engine.playersCount)
+    private var mNames: Array<String?> = arrayOfNulls(presenter { engine.playersCount })
+    var names: Array<String?> = arrayOfNulls(presenter { engine.playersCount })
 
     init {
-        repeat(presenter.engine.playersCount) {
+        repeat(presenter { engine.playersCount }) {
             mNames[it] = "Игрок ${it+1}"
         }
     }
@@ -74,7 +77,6 @@ class ContentAdapter() : RecyclerView.Adapter<InitViewHolder>() {
         )
     }
 
-    override fun getItemCount(): Int {
-        return presenter.engine.playersCount
-    }
+    override fun getItemCount(): Int =
+        presenter { engine.playersCount }
 }

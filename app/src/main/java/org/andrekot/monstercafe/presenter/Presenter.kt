@@ -1,70 +1,42 @@
-package org.andrekot.monstercafe
+package org.andrekot.monstercafe.presenter
 
 /*Created by Andrekot on 07/10/18*/
 
 import android.content.Context
 import android.content.Intent
 import android.view.View
+import org.andrekot.monstercafe.engine.Game
+import org.andrekot.monstercafe.model.Card
+import org.andrekot.monstercafe.model.Cheesecake
+import org.andrekot.monstercafe.model.Player
+import org.andrekot.monstercafe.presenter.contract.PresenterContract
+import org.andrekot.monstercafe.presenter.model.GameState
+import org.andrekot.monstercafe.utils.Starter
+import org.andrekot.monstercafe.view.InitGameActivity
+import org.andrekot.monstercafe.view.CheesecakeActivity
+import org.andrekot.monstercafe.view.GameActivity
+import org.andrekot.monstercafe.view.MainActivity
 
-enum class State {
-    INIT,
-    FOLD_CARDS,
-    ROUND1,
-    END_ROUND1,
-    COUNT_POINTS_ROUND1,
-    ROUND2,
-    END_ROUND2,
-    COUNT_POINTS_ROUND2,
-    ROUND3,
-    END_ROUND3,
-    COUNT_POINTS_ROUND3,
-    COUNT_POINTS_GAME,
-    SHOW_RESULTS,
-    RESTART
-}
-
-class Starter(val starter: (i: Intent)->Unit)
-
-interface Presenter {
-    fun setStarter(s: Starter)
-    fun getCurrentState(): State
-    fun setCurrentState(view: View, new_state: State, cards: Array<Card>?, args: Array<String?>? = null)
-    fun init(view: View, users: Int)
-    fun stateFoldCards(view: View, players: Array<String?>)
-    fun stateRound1(cards: Array<Card>)
-    fun stateRound2()
-    fun stateRound3()
-    fun stateEndRound1()
-    fun stateEndRound2()
-    fun stateEndRound3()
-    fun stateCountPointsRound1()
-    fun stateCountPointsRound2()
-    fun stateCountPointsRound3()
-    fun stateCountPointsGame()
-    fun stateShowResults()
-    fun restartGame(view: View)
-}
-
-abstract class GamePresenter: Presenter {
-    abstract var state: State
+abstract class GamePresenter: PresenterContract {
+    abstract var state: GameState
     abstract var engine: Game
 
-    override fun setCurrentState(view: View, new_state: State, cards: Array<Card>?, args: Array<String?>?) {
+    override fun setCurrentState(view: View, new_state: GameState, cards: Array<Card>?, args: Array<String?>?) {
         when (new_state) {
-            State.INIT -> init(view, args!![0].toString().toInt())
-            State.FOLD_CARDS -> stateFoldCards(view, args!!)
-            State.ROUND1 -> stateRound1(cards!!)
-            State.ROUND2 -> stateRound2()
-            State.ROUND3 -> stateRound3()
-            State.END_ROUND1 -> stateEndRound1()
-            State.END_ROUND2 -> stateEndRound1()
-            State.END_ROUND3 -> stateEndRound1()
-            State.COUNT_POINTS_ROUND1 -> stateCountPointsRound1()
-            State.COUNT_POINTS_ROUND2 -> stateCountPointsRound2()
-            State.COUNT_POINTS_ROUND3 -> stateCountPointsRound3()
-            State.COUNT_POINTS_GAME -> stateCountPointsGame()
-            State.SHOW_RESULTS -> stateShowResults()
-            State.RESTART -> restartGame(view)
+            GameState.INIT -> init(view, args!![0].toString().toInt())
+            GameState.FOLD_CARDS -> stateFoldCards(view, args!!)
+            GameState.ROUND1 -> stateRound1(cards!!)
+            GameState.ROUND2 -> stateRound2()
+            GameState.ROUND3 -> stateRound3()
+            GameState.END_ROUND1 -> stateEndRound1()
+            GameState.END_ROUND2 -> stateEndRound1()
+            GameState.END_ROUND3 -> stateEndRound1()
+            GameState.COUNT_POINTS_ROUND1 -> stateCountPointsRound1()
+            GameState.COUNT_POINTS_ROUND2 -> stateCountPointsRound2()
+            GameState.COUNT_POINTS_ROUND3 -> stateCountPointsRound3()
+            GameState.COUNT_POINTS_GAME -> stateCountPointsGame()
+            GameState.SHOW_RESULTS -> stateShowResults()
+            GameState.RESTART -> restartGame(view)
         }
         this.state = new_state
     }
@@ -73,7 +45,7 @@ abstract class GamePresenter: Presenter {
 class MonsterCafePresenter: GamePresenter() {
     private var currentRound = 1
     private var currentPlayerIndex = 0
-    override var state = State.INIT
+    override var state = GameState.INIT
     override lateinit var engine: Game
     var starter: (i: Intent) -> Unit = {}
 
@@ -101,18 +73,18 @@ class MonsterCafePresenter: GamePresenter() {
         starter = s.starter
     }
 
-    override fun getCurrentState(): State {
+    override fun getCurrentState(): GameState {
         return state
     }
 
     override fun init(view: View, users: Int) {
         engine = Game()
         engine.playersCount = users
-        startActivity<InitGame>(view)
+        startActivity<InitGameActivity>(view)
     }
 
     override fun stateFoldCards(view: View, players: Array<String?>) {
-        if (state != State.INIT) return
+        if (state != GameState.INIT) return
         engine.initGame(players)
         engine.firstCardFold()
         startActivity<GameActivity>(view)
@@ -187,9 +159,9 @@ class MonsterCafePresenter: GamePresenter() {
         if (card[0] is Cheesecake) doCheesecake(view)
         else {
             when (currentRound) {
-                1 -> setCurrentState(view, State.ROUND1, card)
-                2 -> setCurrentState(view, State.ROUND2, card)
-                3 -> setCurrentState(view, State.ROUND3, card)
+                1 -> setCurrentState(view, GameState.ROUND1, card)
+                2 -> setCurrentState(view, GameState.ROUND2, card)
+                3 -> setCurrentState(view, GameState.ROUND3, card)
             }
             startActivity<GameActivity>(view)
         }
